@@ -30,14 +30,14 @@ def get_token(args: argparse.Namespace) -> str:
 
 def call_api(method: str, path: str, token: str, body: dict | None = None) -> dict:
     data = None if body is None else json.dumps(body).encode("utf-8")
+    headers = {"Authorization": token}
+    if data is not None:
+        headers["Content-Type"] = "application/json"
     req = urllib.request.Request(
         HOST + path,
         data=data,
         method=method,
-        headers={
-            "Authorization": token,
-            "Content-Type": "application/json",
-        },
+        headers=headers,
     )
     try:
         with urllib.request.urlopen(req, timeout=60) as response:
