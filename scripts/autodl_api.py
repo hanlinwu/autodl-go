@@ -11,6 +11,7 @@ import json
 import os
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 
 
@@ -54,6 +55,11 @@ def call_api(method: str, path: str, token: str, body: dict | None = None) -> di
         raise SystemExit(f"Non-JSON response: {raw}") from exc
 
 
+def call_get_query(path: str, token: str, params: dict) -> dict:
+    query = urllib.parse.urlencode(params)
+    return call_api("GET", f"{path}?{query}", token)
+
+
 def print_json(obj: object) -> None:
     print(json.dumps(obj, ensure_ascii=False, indent=2, sort_keys=True))
 
@@ -88,8 +94,7 @@ def command_instances(args: argparse.Namespace) -> None:
 
 def command_status(args: argparse.Namespace) -> None:
     token = get_token(args)
-    response = call_api(
-        "GET",
+    response = call_get_query(
         "/api/v1/dev/instance/pro/status",
         token,
         {"instance_uuid": args.instance_uuid},
@@ -100,8 +105,7 @@ def command_status(args: argparse.Namespace) -> None:
 
 def command_snapshot(args: argparse.Namespace) -> None:
     token = get_token(args)
-    response = call_api(
-        "GET",
+    response = call_get_query(
         "/api/v1/dev/instance/pro/snapshot",
         token,
         {"instance_uuid": args.instance_uuid},
