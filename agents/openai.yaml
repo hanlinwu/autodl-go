@@ -1,0 +1,4 @@
+interface:
+  display_name: "AutoDL Manager"
+  short_description: "Manage AutoDL accounts, instances, and experiments"
+  default_prompt: "Use $autodl-manager to check my AutoDL balance and prepare an experiment instance."
